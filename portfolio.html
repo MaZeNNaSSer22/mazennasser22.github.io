@@ -1,0 +1,4804 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mazen Nasser | Cloud & DevOps Engineer</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lemonada:wght@400;600;700&family=Saira:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#0a0c10",
+              surface: "#0f1218",
+              card: "#131820",
+              border: "#1e2a38",
+              cyan: "#00d2ff",
+              cyanDim: "#00a8cc",
+              text: "#e2e8f0",
+              muted: "#7a8fa6",
+            },
+            fontFamily: {
+              heading: ["Lemonada", "cursive"],
+              body: ["Saira", "sans-serif"],
+            },
+            boxShadow: {
+              glow: "0 0 24px rgba(0,210,255,0.35)",
+              glowSm: "0 0 12px rgba(0,210,255,0.2)",
+              glowLg: "0 0 48px rgba(0,210,255,0.45)",
+              card: "0 4px 32px rgba(0,0,0,0.5)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* ── Base ── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: #0a0c10;
+        color: #e2e8f0;
+        font-family: "Saira", sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* ── Scrollbar ── */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0c10;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #00d2ff55;
+        border-radius: 3px;
+      }
+
+      /* ── Noise overlay ── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.4;
+      }
+
+      /* ── Grid bg ── */
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(0, 210, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 210, 255, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+      }
+
+      /* ── Glow blob ── */
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      /* ── Navbar ── */
+      #navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        transition:
+          background 0.3s,
+          backdrop-filter 0.3s,
+          box-shadow 0.3s;
+      }
+      #navbar.scrolled {
+        background: rgba(10, 12, 16, 0.92);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 1px 0 rgba(0, 210, 255, 0.12);
+      }
+      .nav-link {
+        font-family: "Saira", sans-serif;
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: #7a8fa6;
+        transition: color 0.2s;
+        position: relative;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: #00d2ff;
+        transform: scaleX(0);
+        transition: transform 0.25s;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: #00d2ff;
+      }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        transform: scaleX(1);
+      }
+
+      /* ── Hero ── */
+      .profile-ring {
+        background: conic-gradient(from 0deg, #00d2ff, #0a0c10 60%, #00d2ff);
+        /* animation: spin 6s linear infinite; */
+        border-radius: 50%;
+        padding: 3px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .profile-inner {
+        background: #0a0c10;
+        border-radius: 50%;
+        padding: 4px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 210, 255, 0.08);
+        border: 1px solid rgba(0, 210, 255, 0.25);
+        border-radius: 999px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #00d2ff;
+        backdrop-filter: blur(8px);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #00d2ff;
+        box-shadow: 0 0 8px #00d2ff;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.3);
+        }
+      }
+
+      .hero-title {
+        font-family: "Lemonada", cursive;
+        font-size: clamp(2.2rem, 7vw, 4.5rem);
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          #00d2ff 0%,
+          #a8edff 50%,
+          #00d2ff 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.15;
+      }
+
+      /* ── CTA Buttons ── */
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #00d2ff, #0099bb);
+        color: #0a0c10;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 12px 28px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        cursor: pointer;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 32px rgba(0, 210, 255, 0.5);
+      }
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(0, 210, 255, 0.4);
+        color: #00d2ff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition:
+          background 0.2s,
+          box-shadow 0.2s,
+          transform 0.2s;
+        cursor: pointer;
+      }
+      .btn-outline:hover {
+        background: rgba(0, 210, 255, 0.08);
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* ── Section ── */
+      section {
+        position: relative;
+        overflow: hidden;
+      }
+      .section-title {
+        font-family: "Lemonada", cursive;
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 700;
+        color: #e2e8f0;
+      }
+      .section-title span {
+        color: #00d2ff;
+      }
+      .section-line {
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #00d2ff, transparent);
+        border-radius: 2px;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: #131820;
+        border: 1px solid #1e2a38;
+        border-radius: 12px;
+        padding: 24px;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
+      .card:hover {
+        border-color: rgba(0, 210, 255, 0.4);
+        box-shadow:
+          0 0 24px rgba(0, 210, 255, 0.12),
+          0 8px 32px rgba(0, 0, 0, 0.4);
+        transform: translateY(-4px);
+      }
+
+      /* ── Skill bars ── */
+      .skill-bar-bg {
+        background: #1e2a38;
+        border-radius: 999px;
+        height: 6px;
+      }
+      .skill-bar-fill {
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #00d2ff, #006688);
+        box-shadow: 0 0 8px rgba(0, 210, 255, 0.4);
+        width: 0;
+        transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* ── Tech badge ── */
+      .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0, 210, 255, 0.06);
+        border: 1px solid rgba(0, 210, 255, 0.15);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #a0bdd0;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+      }
+      .tech-badge:hover {
+        border-color: rgba(0, 210, 255, 0.5);
+        color: #00d2ff;
+        background: rgba(0, 210, 255, 0.1);
+      }
+
+      /* ── Timeline ── */
+      .timeline-line {
+        position: absolute;
+        left: 20px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #00d2ff, #1e2a38);
+      }
+      .timeline-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #00d2ff;
+        box-shadow: 0 0 12px #00d2ff;
+        flex-shrink: 0;
+        margin-top: 6px;
+      }
+
+      /* ── Project cards ── */
+      .project-card {
+        background: #131820;
+        border: 1px solid #1e2a38;
+        border-radius: 14px;
+        overflow: hidden;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
+      .project-card:hover {
+        border-color: rgba(0, 210, 255, 0.4);
+        box-shadow:
+          0 0 32px rgba(0, 210, 255, 0.15),
+          0 8px 40px rgba(0, 0, 0, 0.5);
+        transform: translateY(-6px);
+      }
+      .project-banner {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .project-banner::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, transparent 40%, #131820 100%);
+      }
+
+      /* ── Featured project card ── */
+      .featured-project {
+        background: linear-gradient(
+          135deg,
+          #0b1520 0%,
+          #0d1c2a 50%,
+          #0a1218 100%
+        );
+        border: 1px solid rgba(0, 210, 255, 0.28);
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        box-shadow:
+          0 0 48px rgba(0, 210, 255, 0.08),
+          0 16px 64px rgba(0, 0, 0, 0.6);
+      }
+      /* Animated grid pattern overlay */
+      .featured-project::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 210, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 210, 255, 0.03) 1px, transparent 1px);
+        background-size: 32px 32px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      /* Corner glow accent */
+      .featured-project::after {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 210, 255, 0.12) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+      .featured-project > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Terminal window */
+      .terminal-window {
+        background: #060b10;
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .terminal-bar {
+        background: #0d1820;
+        border-bottom: 1px solid rgba(0, 210, 255, 0.12);
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .terminal-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .terminal-body {
+        padding: 18px 20px;
+        font-size: 0.82rem;
+        line-height: 1.7;
+      }
+      .terminal-prompt {
+        color: #00d2ff;
+        font-weight: 600;
+      }
+      .terminal-cmd {
+        color: #e2e8f0;
+      }
+      .terminal-dim {
+        color: #4a6070;
+      }
+
+      /* Copy button */
+      .copy-btn {
+        background: rgba(0, 210, 255, 0.08);
+        border: 1px solid rgba(0, 210, 255, 0.25);
+        border-radius: 6px;
+        padding: 4px 12px;
+        color: #00d2ff;
+        font-size: 0.72rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          box-shadow 0.2s;
+        font-family: "Saira", sans-serif;
+        letter-spacing: 0.04em;
+      }
+      .copy-btn:hover {
+        background: rgba(0, 210, 255, 0.18);
+        box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+      }
+
+      /* Feature grid items */
+      .feature-item {
+        background: rgba(0, 210, 255, 0.04);
+        border: 1px solid rgba(0, 210, 255, 0.1);
+        border-radius: 12px;
+        padding: 18px;
+        transition:
+          border-color 0.3s,
+          background 0.3s;
+      }
+      .feature-item:hover {
+        border-color: rgba(0, 210, 255, 0.3);
+        background: rgba(0, 210, 255, 0.07);
+      }
+      .feature-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        margin-top: 5px;
+        background: #00d2ff;
+        box-shadow: 0 0 8px #00d2ff;
+      }
+
+      /* CTA project buttons */
+      .btn-github {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        background: #161b22;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #e2e8f0;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 11px 22px;
+        border-radius: 9px;
+        transition:
+          border-color 0.25s,
+          box-shadow 0.25s,
+          transform 0.25s;
+        text-decoration: none;
+      }
+      .btn-github:hover {
+        border-color: rgba(255, 255, 255, 0.45);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+      }
+      .btn-docker {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        background: rgba(36, 150, 237, 0.12);
+        border: 1px solid rgba(36, 150, 237, 0.35);
+        color: #2496ed;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 11px 22px;
+        border-radius: 9px;
+        transition:
+          background 0.25s,
+          box-shadow 0.25s,
+          transform 0.25s;
+        text-decoration: none;
+      }
+      .btn-docker:hover {
+        background: rgba(36, 150, 237, 0.22);
+        box-shadow: 0 0 24px rgba(36, 150, 237, 0.3);
+        transform: translateY(-2px);
+      }
+
+      /* ── Glassmorphism service cards ── */
+      .glass-card {
+        background: rgba(15, 22, 34, 0.55);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(0, 210, 255, 0.13);
+        border-radius: 18px;
+        padding: 36px 28px;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.35s,
+          box-shadow 0.35s,
+          transform 0.35s;
+      }
+      .glass-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at top left,
+          rgba(0, 210, 255, 0.07) 0%,
+          transparent 65%
+        );
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.35s;
+      }
+      .glass-card:hover {
+        border-color: rgba(0, 210, 255, 0.42);
+        box-shadow:
+          0 0 36px rgba(0, 210, 255, 0.13),
+          0 12px 48px rgba(0, 0, 0, 0.55);
+        transform: translateY(-7px);
+      }
+      .glass-card:hover::before {
+        opacity: 1;
+      }
+      .glass-card:hover .glass-icon {
+        box-shadow: 0 0 22px rgba(0, 210, 255, 0.35);
+        border-color: rgba(0, 210, 255, 0.5);
+        background: rgba(0, 210, 255, 0.14);
+      }
+      .glass-card:hover .glass-title {
+        color: #00d2ff;
+      }
+
+      .glass-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 16px;
+        background: rgba(0, 210, 255, 0.07);
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #00d2ff;
+        margin-bottom: 22px;
+        transition:
+          background 0.3s,
+          box-shadow 0.3s,
+          border-color 0.3s;
+      }
+      .glass-title {
+        font-family: "Lemonada", cursive;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #e2e8f0;
+        margin-bottom: 14px;
+        transition: color 0.3s;
+      }
+      .glass-tag {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(0, 210, 255, 0.06);
+        border: 1px solid rgba(0, 210, 255, 0.13);
+        border-radius: 6px;
+        padding: 3px 10px;
+        font-size: 0.72rem;
+        color: #7a8fa6;
+        transition:
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .glass-card:hover .glass-tag {
+        border-color: rgba(0, 210, 255, 0.25);
+        color: #a8ccd8;
+      }
+
+      /* Staggered slide-up animation */
+      .glass-card.reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.65s ease,
+          transform 0.65s ease,
+          border-color 0.35s,
+          box-shadow 0.35s;
+      }
+      .glass-card.reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .glass-card.reveal.visible:hover {
+        transform: translateY(-7px);
+      }
+
+      /* ── Service card ── */
+      .service-card {
+        background: linear-gradient(135deg, #131820 0%, #0f1520 100%);
+        border: 1px solid #1e2a38;
+        border-radius: 14px;
+        padding: 32px 24px;
+        text-align: center;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
+      .service-card:hover {
+        border-color: rgba(0, 210, 255, 0.4);
+        box-shadow: 0 0 32px rgba(0, 210, 255, 0.1);
+        transform: translateY(-6px);
+      }
+      .service-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: rgba(0, 210, 255, 0.08);
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #00d2ff;
+        margin: 0 auto 20px;
+      }
+
+      /* ── Testimonial ── */
+      .testimonial-card {
+        background: #131820;
+        border: 1px solid #1e2a38;
+        border-radius: 14px;
+        padding: 28px;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s;
+      }
+      .testimonial-card:hover {
+        border-color: rgba(0, 210, 255, 0.3);
+        box-shadow: 0 0 24px rgba(0, 210, 255, 0.1);
+      }
+
+      /* ── Contact form ── */
+      .form-input {
+        width: 100%;
+        background: rgba(0, 210, 255, 0.04);
+        border: 1px solid #1e2a38;
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: #e2e8f0;
+        font-family: "Saira", sans-serif;
+        font-size: 0.9rem;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+      }
+      .form-input:focus {
+        border-color: rgba(0, 210, 255, 0.5);
+        box-shadow: 0 0 12px rgba(0, 210, 255, 0.12);
+      }
+      .form-input::placeholder {
+        color: #4a5f72;
+      }
+
+      /* ── Mobile menu ── */
+      #mobile-menu {
+        display: none;
+        background: rgba(10, 12, 16, 0.97);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 210, 255, 0.1);
+      }
+      #mobile-menu.open {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Hamburger ── */
+      .hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: #00d2ff;
+        border-radius: 2px;
+        transition:
+          transform 0.3s,
+          opacity 0.3s;
+      }
+      .hamburger.open span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+      .hamburger.open span:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.open span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      /* ── Stats ── */
+      .stat-box {
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #1e2a38;
+        border-radius: 12px;
+        background: rgba(0, 210, 255, 0.03);
+      }
+      .stat-number {
+        font-family: "Lemonada", cursive;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #00d2ff;
+      }
+
+      /* ── Footer ── */
+      footer {
+        border-top: 1px solid #1e2a38;
+        background: #0a0c10;
+      }
+
+      /* ── Animate on scroll ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s,
+          transform 0.7s;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ── Social link ── */
+      .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid #1e2a38;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7a8fa6;
+        font-size: 1rem;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          box-shadow 0.2s;
+      }
+      .social-link:hover {
+        border-color: rgba(0, 210, 255, 0.5);
+        color: #00d2ff;
+        box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
+      }
+
+      /* ── Responsive hero floating icons ── */
+      .float-icon {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+  </head>
+  <body class="grid-bg">
+    <!-- ───────────── NAVBAR ───────────── -->
+    <nav id="navbar" class="w-full py-4 px-6 lg:px-12">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Logo -->
+        <a
+          href="#home"
+          class="font-heading font-bold text-xl"
+          style="color: #00d2ff; letter-spacing: -0.5px"
+        >
+          Mazen Nasser
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden lg:flex items-center gap-8">
+          <a href="#home" class="nav-link active">Home</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#education" class="nav-link">Education</a>
+          <a href="#skills" class="nav-link">Skills</a>
+          <a href="#experience" class="nav-link">Experience</a>
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#achievements" class="nav-link">Achievements</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+
+        <!-- CTA + Hamburger -->
+        <div class="flex items-center gap-4">
+          <a
+            href="#contact"
+            class="hidden lg:inline-flex btn-primary text-sm py-2 px-5"
+            >Hire Me</a
+          >
+          <button
+            id="hamburger-btn"
+            class="hamburger lg:hidden flex flex-col gap-1.5 p-1"
+            aria-label="Toggle menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="max-w-7xl mx-auto mt-4 rounded-xl overflow-hidden"
+      >
+        <div class="flex flex-col p-4 gap-2">
+          <a
+            href="#home"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Home</a
+          >
+          <a
+            href="#about"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >About</a
+          >
+          <a
+            href="#education"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Education</a
+          >
+          <a
+            href="#skills"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Skills</a
+          >
+          <a
+            href="#experience"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Experience</a
+          >
+          <a
+            href="#services"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Services</a
+          >
+          <a
+            href="#achievements"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Achievements</a
+          >
+          <a
+            href="#projects"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Projects</a
+          >
+          <a
+            href="#contact"
+            class="nav-link mobile-nav-link py-3 px-4 rounded-lg hover:bg-white/5"
+            >Contact</a
+          >
+          <a href="#contact" class="btn-primary mt-2 justify-center">Hire Me</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ───────────── HERO ───────────── -->
+    <section
+      id="home"
+      class="relative min-h-screen flex items-center justify-center pt-20 pb-12 px-6"
+    >
+      <!-- Blobs -->
+      <div
+        class="blob w-96 h-96 bg-cyan/10 top-10 -left-24"
+        style="background: rgba(0, 210, 255, 0.08)"
+      ></div>
+      <div
+        class="blob w-80 h-80 bg-cyan/5 bottom-10 -right-20"
+        style="background: rgba(0, 210, 255, 0.05)"
+      ></div>
+
+      <div class="relative z-10 text-center max-w-3xl mx-auto">
+        <!-- Status Badge -->
+        <div class="flex justify-center mb-8">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            Open to Opportunities
+          </div>
+        </div>
+
+        <!-- Profile Image -->
+        <div class="flex justify-center mb-8">
+          <div class="profile-ring w-44 h-44 md:w-52 md:h-52">
+            <div class="profile-inner w-full h-full">
+              <img
+                src="profile.jpeg"
+                alt="Mazen Nasser"
+                class="w-full h-full rounded-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <p
+          class="text-muted text-base mb-2 font-light tracking-widest uppercase text-sm"
+        >
+          Hello, I'm
+        </p>
+        <h1 class="hero-title mb-4">Mazen Nasser</h1>
+        <p class="text-white font-semibold text-xl md:text-2xl mb-3">
+          Cloud &amp; DevOps Engineer
+        </p>
+        <p
+          class="text-muted text-base max-w-xl mx-auto mb-10 leading-relaxed text-center"
+        >
+          <span
+            class="italic"
+            style="color: #a8d8e8; font-size: 1.05rem; line-height: 1.8"
+            >"Building and scaling resilient cloud infrastructure through
+            seamless automation and robust CI/CD pipelines."</span
+          >
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4 justify-center mb-12">
+          <a href="#projects" class="btn-primary"
+            ><i class="fa-solid fa-rocket"></i> View Projects</a
+          >
+          <a href="#contact" class="btn-outline"
+            ><i class="fa-solid fa-envelope"></i> Contact Me</a
+          >
+          <a
+            href="https://drive.google.com/file/d/1J6N6KpJbmqRqyCjhfYxEe3bfRZ-iz72g/view?usp=drive_link"
+            target="_blank"
+            class="btn-outline"
+          >
+            <i class="fa-solid fa-download"></i> Download CV
+          </a>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-3 gap-4 max-w-md mx-auto">
+          <div class="stat-box">
+            <div class="stat-number">+1</div>
+            <div class="text-muted text-xs mt-1">Years Exp.</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">+1</div>
+            <div class="text-muted text-xs mt-1">Projects</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number">+1</div>
+            <div class="text-muted text-xs mt-1">Certifications</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted text-xs"
+      >
+        <span>Scroll</span>
+        <div
+          class="w-px h-10"
+          style="background: linear-gradient(to bottom, #00d2ff, transparent)"
+        ></div>
+      </div>
+    </section>
+
+    <!-- ───────────── ABOUT ───────────── -->
+    <section id="about" class="py-24 px-6">
+      <div class="max-w-6xl mx-auto">
+        <!-- Section Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            Who I Am
+          </p>
+          <h2 class="section-title mb-4">About <span>Me</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- Two-column layout: image left, content right -->
+        <div class="grid md:grid-cols-5 gap-12 lg:gap-16 items-center">
+          <!-- ── Profile Image ── -->
+          <div class="reveal md:col-span-2 flex justify-center">
+            <div class="relative">
+              <!-- Outer glow ring -->
+              <div
+                class="absolute inset-0 rounded-full"
+                style="
+                  background: conic-gradient(
+                    from 0deg,
+                    #00d2ff,
+                    transparent 50%,
+                    #00d2ff
+                  );
+                  animation: spin 8s linear infinite;
+                  padding: 3px;
+                  border-radius: 50%;
+                  filter: blur(1px);
+                "
+              ></div>
+              <!-- Decorative corner accents -->
+              <div
+                class="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 rounded-tl-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 rounded-tr-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 rounded-bl-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 rounded-br-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <!-- Image wrapper -->
+              <div
+                class="relative rounded-full p-1"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    #00d2ff,
+                    #006688,
+                    #0a0c10
+                  );
+                  box-shadow:
+                    0 0 40px rgba(0, 210, 255, 0.35),
+                    0 0 80px rgba(0, 210, 255, 0.1);
+                "
+              >
+                <div
+                  class="rounded-full overflow-hidden"
+                  style="width: 260px; height: 260px; background: #0f1820"
+                >
+                  <img
+                    src="about.jpg"
+                    alt="Mazen Nasser"
+                    class="w-full h-full object-cover object-top"
+                  />
+                  >
+                  <div
+                    class="w-full h-full flex items-center justify-center text-6xl"
+                    style="
+                      background: linear-gradient(135deg, #0f1a28, #132030);
+                    "
+                  ></div>
+                </div>
+              </div>
+
+              <!-- Floating badge -->
+              <div
+                class="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                style="
+                  background: rgba(0, 210, 255, 0.1);
+                  border: 1px solid rgba(0, 210, 255, 0.3);
+                  border-radius: 999px;
+                  padding: 6px 18px;
+                  backdrop-filter: blur(8px);
+                "
+              >
+                <span class="text-cyan text-xs font-semibold tracking-wide"
+                  >☁️ Cloud &amp; DevOps</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Text Content ── -->
+          <div class="reveal md:col-span-3 space-y-8 mt-6 md:mt-0">
+            <!-- Learning Journey -->
+            <div class="about-block group">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
+                  style="
+                    background: rgba(0, 210, 255, 0.1);
+                    border: 1px solid rgba(0, 210, 255, 0.25);
+                    color: #00d2ff;
+                  "
+                >
+                  <i class="fa-solid fa-road"></i>
+                </div>
+                <h3
+                  class="font-heading font-semibold text-white text-lg group-hover:text-cyan transition-colors"
+                  style="color: #e2e8f0"
+                >
+                  Learning Journey
+                </h3>
+              </div>
+              <!-- Accent bar -->
+              <div
+                class="ml-12 pl-4"
+                style="border-left: 2px solid rgba(0, 210, 255, 0.2)"
+              >
+                <p class="text-muted leading-relaxed text-sm md:text-base">
+                  I'm mastering DevOps via the
+                  <span class="text-cyan font-medium">DEPI internship</span>,
+                  focusing on CI/CD pipelines, cloud platforms, and
+                  infrastructure automation to effectively bridge Dev and Ops.
+                </p>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div
+              style="
+                height: 1px;
+                background: linear-gradient(
+                  90deg,
+                  rgba(0, 210, 255, 0.15),
+                  transparent
+                );
+              "
+            ></div>
+
+            <!-- DevOps Mindset -->
+            <div class="about-block group">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
+                  style="
+                    background: rgba(0, 210, 255, 0.1);
+                    border: 1px solid rgba(0, 210, 255, 0.25);
+                    color: #00d2ff;
+                  "
+                >
+                  <i class="fa-solid fa-gears"></i>
+                </div>
+                <h3
+                  class="font-heading font-semibold text-lg"
+                  style="color: #e2e8f0"
+                >
+                  DevOps Mindset
+                </h3>
+              </div>
+              <div
+                class="ml-12 pl-4"
+                style="border-left: 2px solid rgba(0, 210, 255, 0.2)"
+              >
+                <p class="text-muted leading-relaxed text-sm md:text-base">
+                  Driven by
+                  <span class="text-cyan font-medium"
+                    >automation and continuous improvement</span
+                  >, I apply modern methodologies to optimize workflows through
+                  hands-on projects and real-world problem-solving.
+                </p>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div
+              style="
+                height: 1px;
+                background: linear-gradient(
+                  90deg,
+                  rgba(0, 210, 255, 0.15),
+                  transparent
+                );
+              "
+            ></div>
+
+            <!-- Interests -->
+            <div class="about-block group">
+              <div class="flex items-center gap-3 mb-3">
+                <div
+                  class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-sm"
+                  style="
+                    background: rgba(0, 210, 255, 0.1);
+                    border: 1px solid rgba(0, 210, 255, 0.25);
+                    color: #00d2ff;
+                  "
+                >
+                  <i class="fa-solid fa-compass"></i>
+                </div>
+                <h3
+                  class="font-heading font-semibold text-lg"
+                  style="color: #e2e8f0"
+                >
+                  Interests
+                </h3>
+              </div>
+              <div
+                class="ml-12 pl-4"
+                style="border-left: 2px solid rgba(0, 210, 255, 0.2)"
+              >
+                <p class="text-muted leading-relaxed text-sm md:text-base">
+                  Beyond work, I enjoy exploring emerging technologies, engaging
+                  with
+                  <span class="text-cyan font-medium">tech communities</span>,
+                  and staying abreast of trends in cloud-native development,
+                  system design, and infrastructure automation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── EDUCATION ───────────── -->
+    <section
+      id="education"
+      class="py-24 px-6"
+      style="background: rgba(0, 210, 255, 0.015)"
+    >
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            Academic Background
+          </p>
+          <h2 class="section-title mb-4"><span>Education</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- Two-column layout -->
+        <div class="grid md:grid-cols-5 gap-12 lg:gap-16 items-center">
+          <!-- ── University Image ── -->
+          <div class="reveal md:col-span-2 flex justify-center">
+            <div class="relative">
+              <!-- Spinning ring -->
+              <div
+                class="absolute inset-0 rounded-full"
+                style="
+                  background: conic-gradient(
+                    from 180deg,
+                    #00d2ff,
+                    transparent 50%,
+                    #00d2ff
+                  );
+                  animation: spin 10s linear infinite reverse;
+                  padding: 3px;
+                  border-radius: 50%;
+                  filter: blur(1px);
+                "
+              ></div>
+              <!-- Bracket corners -->
+              <div
+                class="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 rounded-tl-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 rounded-tr-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 rounded-bl-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <div
+                class="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 rounded-br-lg"
+                style="border-color: #00d2ff55"
+              ></div>
+              <!-- Circle frame -->
+              <div
+                class="relative rounded-full p-1"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    #00d2ff,
+                    #003344,
+                    #0a0c10
+                  );
+                  box-shadow:
+                    0 0 40px rgba(0, 210, 255, 0.3),
+                    0 0 80px rgba(0, 210, 255, 0.08);
+                "
+              >
+                <div
+                  class="rounded-full overflow-hidden"
+                  style="width: 260px; height: 260px; background: #0f1820"
+                >
+                  <img
+                    src="university.jpg.jpg"
+                    alt="Benha University"
+                    class="w-full h-full object-cover"
+                  />
+                  -->
+                  <div
+                    class="w-full h-full flex flex-col items-center justify-center gap-2"
+                    style="
+                      background: linear-gradient(135deg, #0d1f30, #081828);
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-building-columns text-5xl"
+                      style="color: #00d2ff; opacity: 0.7"
+                    ></i>
+                    <span class="text-muted text-xs font-medium tracking-wide"
+                      >university.jpg</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <!-- Floating badge -->
+              <div
+                class="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                style="
+                  background: rgba(0, 210, 255, 0.1);
+                  border: 1px solid rgba(0, 210, 255, 0.3);
+                  border-radius: 999px;
+                  padding: 6px 18px;
+                  backdrop-filter: blur(8px);
+                "
+              >
+                <span class="text-cyan text-xs font-semibold tracking-wide"
+                  >🎓 Since 2022</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Education Details ── -->
+          <div class="reveal md:col-span-3 mt-6 md:mt-0">
+            <!-- Main card -->
+            <div
+              class="card relative overflow-hidden"
+              style="
+                border-color: rgba(0, 210, 255, 0.25);
+                box-shadow: 0 0 32px rgba(0, 210, 255, 0.07);
+              "
+            >
+              <!-- Top accent bar -->
+              <div
+                class="absolute top-0 left-0 right-0 h-0.5"
+                style="
+                  background: linear-gradient(
+                    90deg,
+                    #00d2ff,
+                    rgba(0, 210, 255, 0.1)
+                  );
+                "
+              ></div>
+
+              <!-- University name + icon -->
+              <div class="flex items-center gap-4 mb-6">
+                <div
+                  class="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style="
+                    background: rgba(0, 210, 255, 0.08);
+                    border: 1px solid rgba(0, 210, 255, 0.2);
+                  "
+                >
+                  <i
+                    class="fa-solid fa-building-columns text-2xl"
+                    style="color: #00d2ff"
+                  ></i>
+                </div>
+                <div>
+                  <h3
+                    class="text-white font-heading font-bold text-xl leading-tight"
+                  >
+                    Benha University
+                  </h3>
+                  <p class="text-muted text-sm mt-0.5">Egypt 🇪🇬</p>
+                </div>
+              </div>
+
+              <!-- Divider -->
+              <div
+                class="mb-6"
+                style="
+                  height: 1px;
+                  background: linear-gradient(
+                    90deg,
+                    rgba(0, 210, 255, 0.15),
+                    transparent
+                  );
+                "
+              ></div>
+
+              <!-- Timeline rows -->
+              <div class="space-y-5">
+                <!-- Faculty -->
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-sm"
+                    style="
+                      background: rgba(0, 210, 255, 0.08);
+                      border: 1px solid rgba(0, 210, 255, 0.15);
+                      color: #00d2ff;
+                    "
+                  >
+                    <i class="fa-solid fa-school"></i>
+                  </div>
+                  <div>
+                    <p
+                      class="text-muted text-xs uppercase tracking-wider font-medium mb-1"
+                    >
+                      Faculty
+                    </p>
+                    <p class="text-white font-semibold">
+                      Benha Faculty of Engineering
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Degree — highlighted -->
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-sm"
+                    style="
+                      background: rgba(0, 210, 255, 0.12);
+                      border: 1px solid rgba(0, 210, 255, 0.3);
+                      color: #00d2ff;
+                    "
+                  >
+                    <i class="fa-solid fa-graduation-cap"></i>
+                  </div>
+                  <div>
+                    <p
+                      class="text-muted text-xs uppercase tracking-wider font-medium mb-1"
+                    >
+                      Degree
+                    </p>
+                    <p
+                      class="font-heading font-bold text-lg"
+                      style="
+                        color: #00d2ff;
+                        text-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+                      "
+                    >
+                      Communications &amp; Computer Engineer
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Duration -->
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-sm"
+                    style="
+                      background: rgba(0, 210, 255, 0.08);
+                      border: 1px solid rgba(0, 210, 255, 0.15);
+                      color: #00d2ff;
+                    "
+                  >
+                    <i class="fa-solid fa-calendar-days"></i>
+                  </div>
+                  <div>
+                    <p
+                      class="text-muted text-xs uppercase tracking-wider font-medium mb-1"
+                    >
+                      Duration
+                    </p>
+                    <div class="flex items-center gap-3">
+                      <span class="text-white font-semibold">2022 — 2027</span>
+                      <span
+                        class="text-xs px-3 py-1 rounded-full font-medium"
+                        style="
+                          background: rgba(0, 210, 255, 0.1);
+                          border: 1px solid rgba(0, 210, 255, 0.25);
+                          color: #00d2ff;
+                        "
+                      >
+                        In Progress
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Progress bar -->
+              <div
+                class="mt-6 pt-5"
+                style="border-top: 1px solid rgba(0, 210, 255, 0.08)"
+              >
+                <div class="flex justify-between text-xs text-muted mb-2">
+                  <span>Academic Progress</span>
+                  <span class="text-cyan font-semibold"
+                    >Year 3 of 5 · ~60%</span
+                  >
+                </div>
+                <div class="skill-bar-bg">
+                  <div class="skill-bar-fill" style="width: 60%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── SKILLS ───────────── -->
+    <section
+      id="skills"
+      class="py-24 px-6"
+      style="background: rgba(0, 210, 255, 0.02)"
+    >
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            What I Know
+          </p>
+          <h2 class="section-title mb-4">Technical <span>Skills</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- Skill Cards Grid — 3 cols desktop, 2 tablet, 1 mobile -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- ── 1. Cloud Platforms ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <!-- Top glow line (reveals on hover via JS class) -->
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <!-- Icon -->
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(255, 153, 0, 0.08);
+                border: 1px solid rgba(255, 153, 0, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <i class="fa-brands fa-aws" style="color: #ff9900"></i>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">
+              Cloud Platforms
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">AWS Cloud</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Huawei Cloud</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 2. DevOps Tools ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(36, 150, 237, 0.08);
+                border: 1px solid rgba(36, 150, 237, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <i class="fa-brands fa-docker" style="color: #2496ed"></i>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">
+              DevOps Tools
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm"
+                  >Docker &amp; Containerization</span
+                >
+              </li>
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Kubernetes Orchestration</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 3. Networking ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(0, 210, 255, 0.07);
+                border: 1px solid rgba(0, 210, 255, 0.18);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <i class="fa-solid fa-network-wired" style="color: #00d2ff"></i>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">
+              Networking
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm"
+                  >Computer Networking Concepts &amp; Protocols</span
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 4. Operating Systems ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <i class="fa-brands fa-linux" style="color: #e8e8e8"></i>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">OS</h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Linux</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Windows</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 5. Version Control ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(240, 80, 50, 0.08);
+                border: 1px solid rgba(240, 80, 50, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <i class="fa-brands fa-git-alt" style="color: #f05032"></i>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">
+              Version Control
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Git &amp; GitHub</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 6. Scripting ── -->
+          <div
+            class="reveal skill-card group"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              padding: 32px 28px;
+              transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+              position: relative;
+              overflow: hidden;
+            "
+          >
+            <div
+              class="skill-card-line"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  transparent,
+                  #00d2ff,
+                  transparent
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+              "
+            ></div>
+            <div
+              class="skill-icon-wrap"
+              style="
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                margin-bottom: 20px;
+                background: rgba(0, 210, 255, 0.07);
+                border: 1px solid rgba(0, 210, 255, 0.18);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition:
+                  box-shadow 0.3s,
+                  border-color 0.3s;
+              "
+            >
+              <!-- Terminal SVG icon -->
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="2"
+                  y="3"
+                  width="20"
+                  height="18"
+                  rx="3"
+                  stroke="#00d2ff"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M7 8l3 4-3 4"
+                  stroke="#00d2ff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M13 16h4"
+                  stroke="#00d2ff"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+            <h3 class="font-heading font-bold text-white text-lg mb-4">
+              Scripting
+            </h3>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3">
+                <span
+                  class="skill-bullet"
+                  style="
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background: #00d2ff;
+                    box-shadow: 0 0 6px #00d2ff;
+                    flex-shrink: 0;
+                  "
+                ></span>
+                <span class="text-muted text-sm">Bash Scripting</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /grid -->
+      </div>
+    </section>
+
+    <!-- ───────────── EXPERIENCE ───────────── -->
+    <section id="experience" class="py-24 px-6">
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            My Journey
+          </p>
+          <h2 class="section-title mb-4">Work <span>Experience</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- Side-by-Side Cards — 2 cols desktop, 1 col mobile -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <!-- ══ CARD 1 — DEPI ══ -->
+          <div
+            class="reveal exp-card"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              overflow: hidden;
+              position: relative;
+              transition:
+                border-color 0.35s,
+                box-shadow 0.35s,
+                transform 0.35s;
+            "
+          >
+            <!-- Top accent line -->
+            <div
+              style="
+                height: 3px;
+                background: linear-gradient(
+                  90deg,
+                  #00d2ff,
+                  rgba(0, 210, 255, 0.1)
+                );
+              "
+            ></div>
+
+            <div style="padding: 32px">
+              <!-- Header row: logo + title -->
+              <div class="flex items-start justify-between gap-4 mb-6">
+                <div class="flex-1">
+                  <!-- Status badge -->
+                  <span
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      background: rgba(0, 210, 255, 0.08);
+                      border: 1px solid rgba(0, 210, 255, 0.22);
+                      border-radius: 999px;
+                      padding: 4px 12px;
+                      font-size: 0.7rem;
+                      color: #00d2ff;
+                      font-weight: 600;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <span
+                      style="
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: #00d2ff;
+                        box-shadow: 0 0 6px #00d2ff;
+                        animation: pulse 2s infinite;
+                      "
+                    ></span>
+                    ACTIVE · Round 4
+                  </span>
+                  <!-- Title -->
+                  <h3
+                    class="font-heading font-bold text-xl leading-tight"
+                    style="
+                      color: #00d2ff;
+                      text-shadow: 0 0 18px rgba(0, 210, 255, 0.35);
+                    "
+                  >
+                    DevOps Trainee
+                  </h3>
+                  <p
+                    class="font-heading font-bold text-xl leading-tight"
+                    style="
+                      color: #e4faf6;
+                      text-shadow: 0 0 18px rgba(0, 200, 170, 0.3);
+                    "
+                  >
+                    at DEPI
+                  </p>
+                </div>
+
+                <!-- Logo placeholder -->
+                <div
+                  style="
+                    width: 68px;
+                    height: 68px;
+                    border-radius: 14px;
+                    flex-shrink: 0;
+                    background: rgba(0, 210, 255, 0.06);
+                    border: 1px solid rgba(0, 210, 255, 0.18);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                  "
+                >
+                  <img
+                    src="depi1.png"
+                    alt="DEPI"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: contain;
+                      border-radius: 8px;
+                    "
+                  />
+                  <i></i>
+
+                  <span
+                    style="
+                      font-size: 0.55rem;
+                      color: #00d2ff;
+                      font-weight: 700;
+                      letter-spacing: 0.08em;
+                    "
+                  >
+                  </span>
+                </div>
+              </div>
+
+              <!-- Org name + divider -->
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: 20px;
+                "
+              >
+                <i
+                  class="fa-solid fa-landmark"
+                  style="color: #7a8fa6; font-size: 0.8rem"
+                ></i>
+                <span style="color: #7a8fa6; font-size: 0.82rem"
+                  >Digital Egypt Pioneers Initiative</span
+                >
+              </div>
+              <div
+                style="
+                  height: 1px;
+                  background: linear-gradient(
+                    90deg,
+                    rgba(0, 210, 255, 0.12),
+                    transparent
+                  );
+                  margin-bottom: 20px;
+                "
+              ></div>
+
+              <!-- Bullet points -->
+              <ul
+                style="
+                  list-style: none;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 14px;
+                "
+              >
+                <li style="display: flex; gap: 12px; align-items: flex-start">
+                  <div
+                    style="
+                      width: 28px;
+                      height: 28px;
+                      border-radius: 8px;
+                      flex-shrink: 0;
+                      margin-top: 1px;
+                      background: rgba(0, 210, 255, 0.08);
+                      border: 1px solid rgba(0, 210, 255, 0.2);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-flag"
+                      style="color: #00d2ff; font-size: 0.65rem"
+                    ></i>
+                  </div>
+                  <p
+                    style="
+                      color: #7a8fa6;
+                      font-size: 0.875rem;
+                      line-height: 1.65;
+                    "
+                  >
+                    Engaging in intensive training on
+                    <span style="color: #e2e8f0; font-weight: 500"
+                      >Round 4 of the national initiative.</span
+                    >
+                  </p>
+                </li>
+                <li style="display: flex; gap: 12px; align-items: flex-start">
+                  <div
+                    style="
+                      width: 28px;
+                      height: 28px;
+                      border-radius: 8px;
+                      flex-shrink: 0;
+                      margin-top: 1px;
+                      background: rgba(0, 210, 255, 0.08);
+                      border: 1px solid rgba(0, 210, 255, 0.2);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i
+                      class="fa-brands fa-docker"
+                      style="color: #00d2ff; font-size: 0.65rem"
+                    ></i>
+                  </div>
+                  <p
+                    style="
+                      color: #7a8fa6;
+                      font-size: 0.875rem;
+                      line-height: 1.65;
+                    "
+                  >
+                    Focusing on
+                    <span style="color: #e2e8f0; font-weight: 500"
+                      >containerization, automation,</span
+                    >
+                    and infrastructure as code.
+                  </p>
+                </li>
+              </ul>
+
+              <!-- Tech tags -->
+              <div
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 8px;
+                  margin-top: 24px;
+                  padding-top: 20px;
+                  border-top: 1px solid rgba(0, 210, 255, 0.08);
+                "
+              >
+                <span
+                  class="tech-badge"
+                  style="font-size: 0.72rem; padding: 4px 12px"
+                  >Docker</span
+                >
+                <span
+                  class="tech-badge"
+                  style="font-size: 0.72rem; padding: 4px 12px"
+                  >Kubernetes</span
+                >
+                <span
+                  class="tech-badge"
+                  style="font-size: 0.72rem; padding: 4px 12px"
+                  >Ansible</span
+                >
+                <span
+                  class="tech-badge"
+                  style="font-size: 0.72rem; padding: 4px 12px"
+                  >Terraform</span
+                >
+                <span
+                  class="tech-badge"
+                  style="font-size: 0.72rem; padding: 4px 12px"
+                  >CI/CD</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ CARD 2 — NTI ══ -->
+          <div
+            class="reveal exp-card"
+            style="
+              background: #131820;
+              border: 1px solid #1e2a38;
+              border-radius: 16px;
+              overflow: hidden;
+              position: relative;
+              transition:
+                border-color 0.35s,
+                box-shadow 0.35s,
+                transform 0.35s;
+            "
+          >
+            <!-- Top accent line (teal-green variant) -->
+            <div
+              style="
+                height: 3px;
+                background: linear-gradient(
+                  90deg,
+                  #00c8aa,
+                  rgba(0, 200, 170, 0.1)
+                );
+              "
+            ></div>
+
+            <div style="padding: 32px">
+              <!-- Header row: logo + title -->
+              <div class="flex items-start justify-between gap-4 mb-6">
+                <div class="flex-1">
+                  <!-- Status badge -->
+                  <span
+                    style="
+                      display: inline-flex;
+                      align-items: center;
+                      gap: 6px;
+                      background: rgba(0, 200, 170, 0.08);
+                      border: 1px solid rgba(0, 200, 170, 0.22);
+                      border-radius: 999px;
+                      padding: 4px 12px;
+                      font-size: 0.7rem;
+                      color: #00c8aa;
+                      font-weight: 600;
+                      letter-spacing: 0.05em;
+                      margin-bottom: 12px;
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-circle-check"
+                      style="font-size: 0.6rem"
+                    ></i>
+                    COMPLETED
+                  </span>
+                  <!-- Title -->
+                  <h3
+                    class="font-heading font-bold text-xl leading-tight"
+                    style="
+                      color: #00c8aa;
+                      text-shadow: 0 0 18px rgba(0, 200, 170, 0.3);
+                    "
+                  >
+                    Cloud Essentials Trainee
+                  </h3>
+                  <p
+                    class="font-heading font-bold text-xl leading-tight"
+                    style="
+                      color: #e4faf6;
+                      text-shadow: 0 0 18px rgba(0, 200, 170, 0.3);
+                    "
+                  >
+                    at NTI
+                  </p>
+                </div>
+
+                <!-- Logo placeholder -->
+                <div
+                  style="
+                    width: 68px;
+                    height: 68px;
+                    border-radius: 14px;
+                    flex-shrink: 0;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.18);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                  "
+                >
+                  <img
+                    src="nti.png.png"
+                    alt="NTI"
+                    style="
+                      width: 100%;
+                      height: 100%;
+                      object-fit: contain;
+                      border-radius: 8px;
+                    "
+                  />
+
+                  <i></i>
+                </div>
+              </div>
+
+              <!-- Org name + divider -->
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: 20px;
+                "
+              >
+                <i
+                  class="fa-solid fa-building"
+                  style="color: #7a8fa6; font-size: 0.8rem"
+                ></i>
+                <span style="color: #7a8fa6; font-size: 0.82rem"
+                  >National Telecommunication Institute</span
+                >
+              </div>
+              <div
+                style="
+                  height: 1px;
+                  background: linear-gradient(
+                    90deg,
+                    rgba(0, 200, 170, 0.12),
+                    transparent
+                  );
+                  margin-bottom: 20px;
+                "
+              ></div>
+
+              <!-- Bullet points -->
+              <ul
+                style="
+                  list-style: none;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 14px;
+                "
+              >
+                <li style="display: flex; gap: 12px; align-items: flex-start">
+                  <div
+                    style="
+                      width: 28px;
+                      height: 28px;
+                      border-radius: 8px;
+                      flex-shrink: 0;
+                      margin-top: 1px;
+                      background: rgba(0, 200, 170, 0.08);
+                      border: 1px solid rgba(0, 200, 170, 0.2);
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-cloud"
+                      style="color: #00c8aa; font-size: 0.65rem"
+                    ></i>
+                  </div>
+                  <p
+                    style="
+                      color: #7a8fa6;
+                      font-size: 0.875rem;
+                      line-height: 1.65;
+                    "
+                  >
+                    Gained a solid understanding of
+                    <span style="color: #e2e8f0; font-weight: 500"
+                      >cloud computing fundamentals</span
+                    >, service and deployment models
+                    <span style="color: #00c8aa; font-weight: 600"
+                      >(IaaS, PaaS, SaaS)</span
+                    >, and virtualization.
+                  </p>
+                </li>
+              </ul>
+
+              <!-- Tech tags -->
+              <div
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 8px;
+                  margin-top: 24px;
+                  padding-top: 20px;
+                  border-top: 1px solid rgba(0, 200, 170, 0.08);
+                "
+              >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.15);
+                    border-radius: 8px;
+                    padding: 4px 12px;
+                    font-size: 0.72rem;
+                    color: #7a9fa8;
+                    transition:
+                      border-color 0.2s,
+                      color 0.2s;
+                  "
+                  >IaaS</span
+                >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.15);
+                    border-radius: 8px;
+                    padding: 4px 12px;
+                    font-size: 0.72rem;
+                    color: #7a9fa8;
+                  "
+                  >PaaS</span
+                >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.15);
+                    border-radius: 8px;
+                    padding: 4px 12px;
+                    font-size: 0.72rem;
+                    color: #7a9fa8;
+                  "
+                  >SaaS</span
+                >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.15);
+                    border-radius: 8px;
+                    padding: 4px 12px;
+                    font-size: 0.72rem;
+                    color: #7a9fa8;
+                  "
+                  >Virtualization</span
+                >
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(0, 200, 170, 0.06);
+                    border: 1px solid rgba(0, 200, 170, 0.15);
+                    border-radius: 8px;
+                    padding: 4px 12px;
+                    font-size: 0.72rem;
+                    color: #7a9fa8;
+                  "
+                  >Cloud Fundamentals</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /grid -->
+      </div>
+    </section>
+
+    <!-- ───────────── SERVICES ───────────── -->
+    <section
+      id="services"
+      class="py-24 px-6"
+      style="background: rgba(0, 210, 255, 0.015)"
+    >
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            What I Offer
+          </p>
+          <h2 class="section-title mb-4">Offered <span>Services</span></h2>
+          <div class="section-line mx-auto"></div>
+          <p class="text-muted text-sm mt-4 max-w-xl text-center">
+            Focused on cloud-native engineering and automation — here's how I
+            can help your team move faster and scale smarter.
+          </p>
+        </div>
+
+        <!-- 3-col desktop · 2-col tablet · 1-col mobile -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          <!-- ── 1. CI/CD Automation ── -->
+          <div class="glass-card reveal" style="transition-delay: 0ms">
+            <div class="glass-icon">
+              <i class="fa-solid fa-infinity"></i>
+            </div>
+            <div class="glass-title">CI/CD Automation</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              End-to-end automated pipelines from commit to production — faster
+              delivery, zero guesswork.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">Automated Pipelines</span>
+              <span class="glass-tag">Deployment Strategy</span>
+              <span class="glass-tag">Fast Delivery</span>
+            </div>
+          </div>
+
+          <!-- ── 2. Infrastructure as Code ── -->
+          <div class="glass-card reveal" style="transition-delay: 80ms">
+            <div class="glass-icon">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <div class="glass-title">Infrastructure as Code</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              Reproducible, version-controlled infrastructure using modern IaC
+              tooling for any cloud.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">Terraform</span>
+              <span class="glass-tag">Ansible</span>
+              <span class="glass-tag">Automated Provisioning</span>
+            </div>
+          </div>
+
+          <!-- ── 3. Monitoring & Logging ── -->
+          <div class="glass-card reveal" style="transition-delay: 160ms">
+            <div class="glass-icon">
+              <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div class="glass-title">Monitoring &amp; Logging</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              Complete observability stack to track metrics, visualize logs, and
+              alert on anomalies proactively.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">Prometheus</span>
+              <span class="glass-tag">Grafana</span>
+              <span class="glass-tag">Complete Stack</span>
+            </div>
+          </div>
+
+          <!-- ── 4. Cloud Architecture ── -->
+          <div class="glass-card reveal" style="transition-delay: 240ms">
+            <div class="glass-icon">
+              <i class="fa-solid fa-cloud"></i>
+            </div>
+            <div class="glass-title">Cloud Architecture</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              Design resilient, scalable, and highly available cloud
+              environments on AWS and Huawei Cloud.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">AWS &amp; Huawei Design</span>
+              <span class="glass-tag">Scalability</span>
+              <span class="glass-tag">High Availability</span>
+            </div>
+          </div>
+
+          <!-- ── 5. Containerization ── -->
+          <div class="glass-card reveal" style="transition-delay: 320ms">
+            <div class="glass-icon">
+              <i class="fa-brands fa-docker"></i>
+            </div>
+            <div class="glass-title">Containerization</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              Package and orchestrate workloads with Docker and Kubernetes for
+              consistent, portable deployments.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">Docker</span>
+              <span class="glass-tag">Kubernetes</span>
+              <span class="glass-tag">Microservices</span>
+              <span class="glass-tag">Orchestration</span>
+            </div>
+          </div>
+
+          <!-- ── 6. Cost Optimization ── -->
+          <div class="glass-card reveal" style="transition-delay: 400ms">
+            <div class="glass-icon">
+              <i class="fa-solid fa-coins"></i>
+            </div>
+            <div class="glass-title">Cost Optimization</div>
+            <p class="text-muted text-sm leading-relaxed mb-5">
+              Analyze cloud spend, right-size resources, and cut waste without
+              sacrificing performance.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span class="glass-tag">Cloud Spend Analysis</span>
+              <span class="glass-tag">Resource Scaling</span>
+              <span class="glass-tag">Efficiency</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── ACHIEVEMENTS ───────────── -->
+    <section
+      id="achievements"
+      class="py-24 px-6"
+      style="background: rgba(0, 210, 255, 0.015)"
+    >
+      <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            Recognition
+          </p>
+          <h2 class="section-title mb-4"><span>Achievements</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- ════ HCCDA Premium Certification Card ════ -->
+        <div
+          class="reveal"
+          style="
+            background: linear-gradient(
+              135deg,
+              #0e1a10 0%,
+              #0c1520 40%,
+              #101008 100%
+            );
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+              0 0 60px rgba(212, 175, 55, 0.1),
+              0 0 30px rgba(0, 210, 255, 0.07),
+              0 20px 80px rgba(0, 0, 0, 0.65);
+          "
+        >
+          <!-- Animated top shimmer line -->
+          <div
+            style="
+              height: 2px;
+              background: linear-gradient(
+                90deg,
+                transparent,
+                #d4af37,
+                #00d2ff,
+                #d4af37,
+                transparent
+              );
+              animation: shimmer 3s ease-in-out infinite;
+              background-size: 200% 100%;
+            "
+          ></div>
+
+          <!-- Grid overlay -->
+          <div
+            style="
+              position: absolute;
+              inset: 0;
+              pointer-events: none;
+              z-index: 0;
+              background-image:
+                linear-gradient(rgba(212, 175, 55, 0.025) 1px, transparent 1px),
+                linear-gradient(
+                  90deg,
+                  rgba(212, 175, 55, 0.025) 1px,
+                  transparent 1px
+                );
+              background-size: 40px 40px;
+            "
+          ></div>
+
+          <!-- Top-right radial glow -->
+          <div
+            style="
+              position: absolute;
+              top: -80px;
+              right: -80px;
+              width: 260px;
+              height: 260px;
+              border-radius: 50%;
+              background: radial-gradient(
+                circle,
+                rgba(212, 175, 55, 0.12) 0%,
+                transparent 70%
+              );
+              pointer-events: none;
+              z-index: 0;
+            "
+          ></div>
+          <!-- Bottom-left radial glow -->
+          <div
+            style="
+              position: absolute;
+              bottom: -60px;
+              left: -60px;
+              width: 200px;
+              height: 200px;
+              border-radius: 50%;
+              background: radial-gradient(
+                circle,
+                rgba(0, 210, 255, 0.08) 0%,
+                transparent 70%
+              );
+              pointer-events: none;
+              z-index: 0;
+            "
+          ></div>
+
+          <!-- ── Card Content ── -->
+          <div style="position: relative; z-index: 1; padding: 44px 40px 40px">
+            <!-- Top row: badge label + logo -->
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-bottom: 32px;
+              "
+            >
+              <!-- Left: cert level chip -->
+              <div>
+                <span
+                  style="
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: rgba(212, 175, 55, 0.1);
+                    border: 1px solid rgba(212, 175, 55, 0.35);
+                    border-radius: 999px;
+                    padding: 6px 16px;
+                    font-size: 0.72rem;
+                    color: #d4af37;
+                    font-weight: 700;
+                    letter-spacing: 0.08em;
+                    margin-bottom: 20px;
+                  "
+                >
+                  <i class="fa-solid fa-trophy" style="font-size: 0.65rem"></i>
+                  PROFESSIONAL CERTIFICATION
+                </span>
+
+                <!-- Main cert title -->
+                <h3
+                  class="font-heading font-bold"
+                  style="
+                    font-size: clamp(1.2rem, 3vw, 1.65rem);
+                    line-height: 1.3;
+                    margin-bottom: 8px;
+                    color: #f5f0e0;
+                  "
+                >
+                  Huawei Certified Cloud Developer
+                </h3>
+                <h3
+                  class="font-heading font-bold"
+                  style="
+                    font-size: clamp(1.2rem, 3vw, 1.65rem);
+                    line-height: 1.3;
+                    margin-bottom: 8px;
+                    color: #f5f0e0;
+                  "
+                >
+                  Associate (HCCDA) - Tech Essentials
+                </h3>
+              </div>
+
+              <!-- Right: Huawei Logo placeholder -->
+              <div
+                style="
+                  width: 96px;
+                  height: 96px;
+                  border-radius: 20px;
+                  flex-shrink: 0;
+                  background: rgba(212, 175, 55, 0.07);
+                  border: 1px solid rgba(212, 175, 55, 0.3);
+                  box-shadow: 0 0 24px rgba(212, 175, 55, 0.15);
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 6px;
+                "
+              >
+                <img
+                  src="huawei.png.png"
+                  alt="Huawei Certification"
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    object-fit: contain;
+                    border-radius: 12px;
+                  "
+                />
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M50 10 C30 10 10 30 10 50 C10 70 30 90 50 90 C70 90 90 70 90 50 C90 30 70 10 50 10Z"
+                    stroke="#d4af37"
+                    stroke-width="4"
+                    fill="none"
+                  />
+                  <path
+                    d="M50 25 L55 40 L70 40 L58 50 L63 65 L50 56 L37 65 L42 50 L30 40 L45 40Z"
+                    fill="#d4af37"
+                    opacity="0.8"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div
+              style="
+                height: 1px;
+                background: linear-gradient(
+                  90deg,
+                  rgba(212, 175, 55, 0.3),
+                  rgba(0, 210, 255, 0.15),
+                  transparent
+                );
+                margin-bottom: 28px;
+              "
+            ></div>
+
+            <!-- Issuer + description row -->
+            <div
+              style="
+                display: grid;
+                grid-template-columns: auto 1fr;
+                gap: 0 40px;
+                margin-bottom: 32px;
+              "
+              class="cert-info-grid"
+            >
+              <!-- Issuer -->
+              <div
+                style="
+                  display: flex;
+                  align-items: flex-start;
+                  gap: 12px;
+                  padding-right: 40px;
+                  border-right: 1px solid rgba(212, 175, 55, 0.15);
+                "
+                class="cert-issuer"
+              >
+                <div
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 10px;
+                    flex-shrink: 0;
+                    background: rgba(212, 175, 55, 0.08);
+                    border: 1px solid rgba(212, 175, 55, 0.2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i
+                    class="fa-solid fa-building"
+                    style="color: #d4af37; font-size: 0.8rem"
+                  ></i>
+                </div>
+                <div>
+                  <p
+                    style="
+                      color: #6a8090;
+                      font-size: 0.68rem;
+                      font-weight: 700;
+                      letter-spacing: 0.1em;
+                      text-transform: uppercase;
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Issuer
+                  </p>
+                  <p
+                    style="color: #f5f0e0; font-weight: 700; font-size: 0.95rem"
+                  >
+                    Huawei
+                  </p>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div
+                style="display: flex; align-items: flex-start; gap: 12px"
+                class="cert-desc"
+              >
+                <div
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 10px;
+                    flex-shrink: 0;
+                    background: rgba(0, 210, 255, 0.07);
+                    border: 1px solid rgba(0, 210, 255, 0.18);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i
+                    class="fa-solid fa-cloud"
+                    style="color: #00d2ff; font-size: 0.8rem"
+                  ></i>
+                </div>
+                <div>
+                  <p
+                    style="
+                      color: #6a8090;
+                      font-size: 0.68rem;
+                      font-weight: 700;
+                      letter-spacing: 0.1em;
+                      text-transform: uppercase;
+                      margin-bottom: 6px;
+                    "
+                  >
+                    Description
+                  </p>
+                  <p
+                    style="
+                      color: #9ab0be;
+                      font-size: 0.875rem;
+                      line-height: 1.75;
+                    "
+                  >
+                    Gained comprehensive knowledge in
+                    <span style="color: #00d2ff; font-weight: 600"
+                      >Huawei Cloud services</span
+                    >, including compute, storage, networking, security, and
+                    more.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Knowledge tags row -->
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 36px;
+              "
+            >
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: rgba(0, 210, 255, 0.06);
+                  border: 1px solid rgba(0, 210, 255, 0.15);
+                  border-radius: 7px;
+                  padding: 5px 12px;
+                  font-size: 0.73rem;
+                  color: #7ab0be;
+                "
+              >
+                <i
+                  class="fa-solid fa-microchip"
+                  style="font-size: 0.65rem; color: #00d2ff"
+                ></i>
+                Compute
+              </span>
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: rgba(0, 210, 255, 0.06);
+                  border: 1px solid rgba(0, 210, 255, 0.15);
+                  border-radius: 7px;
+                  padding: 5px 12px;
+                  font-size: 0.73rem;
+                  color: #7ab0be;
+                "
+              >
+                <i
+                  class="fa-solid fa-database"
+                  style="font-size: 0.65rem; color: #00d2ff"
+                ></i>
+                Storage
+              </span>
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: rgba(0, 210, 255, 0.06);
+                  border: 1px solid rgba(0, 210, 255, 0.15);
+                  border-radius: 7px;
+                  padding: 5px 12px;
+                  font-size: 0.73rem;
+                  color: #7ab0be;
+                "
+              >
+                <i
+                  class="fa-solid fa-network-wired"
+                  style="font-size: 0.65rem; color: #00d2ff"
+                ></i>
+                Networking
+              </span>
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: rgba(0, 210, 255, 0.06);
+                  border: 1px solid rgba(0, 210, 255, 0.15);
+                  border-radius: 7px;
+                  padding: 5px 12px;
+                  font-size: 0.73rem;
+                  color: #7ab0be;
+                "
+              >
+                <i
+                  class="fa-solid fa-shield-halved"
+                  style="font-size: 0.65rem; color: #00d2ff"
+                ></i>
+                Security
+              </span>
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 6px;
+                  background: rgba(0, 210, 255, 0.06);
+                  border: 1px solid rgba(0, 210, 255, 0.15);
+                  border-radius: 7px;
+                  padding: 5px 12px;
+                  font-size: 0.73rem;
+                  color: #7ab0be;
+                "
+              >
+                <i
+                  class="fa-solid fa-cloud"
+                  style="font-size: 0.65rem; color: #00d2ff"
+                ></i>
+                Cloud Fundamentals
+              </span>
+            </div>
+
+            <!-- CTA: View Credential button — centered -->
+            <div style="display: flex; justify-content: center">
+              <a
+                href="https://drive.google.com/file/d/1kHi6kAbnc2VhkxApT7zEc76ZtPkf-pi3/view?usp=drive_link"
+                target="_blank"
+                id="view-credential-btn"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 10px;
+                  background: transparent;
+                  border: 1.5px solid rgba(212, 175, 55, 0.5);
+                  color: #d4af37;
+                  font-family: &quot;Saira&quot;, sans-serif;
+                  font-weight: 700;
+                  font-size: 0.9rem;
+                  padding: 13px 36px;
+                  border-radius: 10px;
+                  text-decoration: none;
+                  letter-spacing: 0.06em;
+                  box-shadow:
+                    0 0 20px rgba(212, 175, 55, 0.12),
+                    inset 0 0 20px rgba(212, 175, 55, 0.03);
+                  transition:
+                    background 0.3s,
+                    border-color 0.3s,
+                    box-shadow 0.3s,
+                    color 0.3s,
+                    transform 0.25s;
+                "
+              >
+                <i class="fa-solid fa-award"></i>
+                View Credential
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square"
+                  style="font-size: 0.75rem"
+                ></i>
+              </a>
+            </div>
+          </div>
+          <!-- /card content -->
+        </div>
+        <!-- /premium cert card -->
+      </div>
+    </section>
+
+    <style>
+      /* Shimmer animation for top bar */
+      @keyframes shimmer {
+        0% {
+          background-position: -200% center;
+        }
+        100% {
+          background-position: 200% center;
+        }
+      }
+      /* View Credential hover */
+      #view-credential-btn:hover {
+        background: rgba(212, 175, 55, 0.1) !important;
+        border-color: rgba(212, 175, 55, 0.85) !important;
+        color: #f5d060 !important;
+        box-shadow:
+          0 0 32px rgba(212, 175, 55, 0.35),
+          0 0 12px rgba(0, 210, 255, 0.15) !important;
+        transform: translateY(-3px) !important;
+      }
+      /* Responsive: stack issuer + description */
+      @media (max-width: 640px) {
+        .cert-info-grid {
+          grid-template-columns: 1fr !important;
+          gap: 20px 0 !important;
+        }
+        .cert-issuer {
+          padding-right: 0 !important;
+          border-right: none !important;
+          padding-bottom: 20px;
+          border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        }
+      }
+    </style>
+
+    <!-- ───────────── PROJECTS ───────────── -->
+    <section id="projects" class="py-24 px-6">
+      <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-16">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            My Work
+          </p>
+          <h2 class="section-title mb-4">Featured <span>Projects</span></h2>
+          <div class="section-line mx-auto"></div>
+        </div>
+
+        <!-- ════ FEATURED PROJECT: Bash-DBMS ════ -->
+        <div class="reveal featured-project">
+          <!-- ── Banner / Header area ── -->
+          <div
+            style="
+              padding: 36px 36px 0;
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 20px;
+            "
+          >
+            <!-- Left: title block -->
+            <div style="flex: 1; min-width: 260px">
+              <span
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 7px;
+                  background: rgba(0, 210, 255, 0.08);
+                  border: 1px solid rgba(0, 210, 255, 0.22);
+                  border-radius: 999px;
+                  padding: 5px 14px;
+                  font-size: 0.72rem;
+                  color: #00d2ff;
+                  font-weight: 700;
+                  letter-spacing: 0.06em;
+                  margin-bottom: 16px;
+                "
+              >
+                <i class="fa-solid fa-star" style="font-size: 0.6rem"></i>
+                FEATURED PROJECT
+              </span>
+              <h3
+                class="font-heading font-bold"
+                style="
+                  font-size: clamp(1.25rem, 3vw, 1.75rem);
+                  color: #e2e8f0;
+                  line-height: 1.25;
+                  margin-bottom: 8px;
+                "
+              >
+                Bash-DBMS
+              </h3>
+              <p
+                style="
+                  color: #00d2ff;
+                  font-size: 0.875rem;
+                  font-weight: 600;
+                  margin-bottom: 16px;
+                  font-family: &quot;Saira&quot;, sans-serif;
+                "
+              >
+                A Serverless Relational Database Engine
+              </p>
+              <p
+                style="
+                  color: #7a8fa6;
+                  font-size: 0.9rem;
+                  line-height: 1.75;
+                  max-width: 560px;
+                "
+              >
+                A Dockerized relational database engine built with Bash,
+                simulating
+                <span style="color: #a8d4e0; font-weight: 500"
+                  >SQL-like CRUD operations</span
+                >
+                and DDL/DML functionality directly through the Linux file
+                system.
+              </p>
+            </div>
+
+            <!-- Right: CTA buttons -->
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                flex-shrink: 0;
+              "
+            >
+              <a
+                href="https://github.com/MaZeNNaSSer22/Database-Management-System-DBMS-.git"
+                target="_blank"
+                class="btn-github"
+              >
+                <i class="fa-brands fa-github" style="font-size: 1.1rem"></i>
+                View on GitHub
+              </a>
+              <a
+                href="https://hub.docker.com/r/mazennasser/bash-database"
+                target="_blank"
+                class="btn-docker"
+              >
+                <i class="fa-brands fa-docker" style="font-size: 1.1rem"></i>
+                Docker Hub
+              </a>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div
+            style="
+              margin: 28px 36px 0;
+              height: 1px;
+              background: linear-gradient(
+                90deg,
+                rgba(0, 210, 255, 0.2),
+                transparent
+              );
+            "
+          ></div>
+
+          <!-- ── Tech Stack badges ── -->
+          <div style="padding: 24px 36px">
+            <p
+              style="
+                color: #7a8fa6;
+                font-size: 0.72rem;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+              "
+            >
+              Tech Stack
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px">
+              <div
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  background: rgba(78, 170, 37, 0.1);
+                  border: 1px solid rgba(78, 170, 37, 0.25);
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                "
+              >
+                <i
+                  class="fa-solid fa-terminal"
+                  style="color: #4eaa25; font-size: 0.85rem"
+                ></i>
+                <span
+                  style="
+                    color: #d0d0d0;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    font-family: &quot;Saira&quot;, sans-serif;
+                  "
+                  >Bash Shell Scripting</span
+                >
+              </div>
+              <div
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  background: rgba(255, 255, 255, 0.05);
+                  border: 1px solid rgba(255, 255, 255, 0.12);
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                "
+              >
+                <i
+                  class="fa-brands fa-linux"
+                  style="color: #e8e8e8; font-size: 0.9rem"
+                ></i>
+                <span
+                  style="
+                    color: #d0d0d0;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    font-family: &quot;Saira&quot;, sans-serif;
+                  "
+                  >Linux (RHEL/Ubuntu)</span
+                >
+              </div>
+              <div
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  background: rgba(36, 150, 237, 0.1);
+                  border: 1px solid rgba(36, 150, 237, 0.25);
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                "
+              >
+                <i
+                  class="fa-brands fa-docker"
+                  style="color: #2496ed; font-size: 0.9rem"
+                ></i>
+                <span
+                  style="
+                    color: #d0d0d0;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    font-family: &quot;Saira&quot;, sans-serif;
+                  "
+                  >Docker</span
+                >
+              </div>
+              <div
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  background: rgba(240, 80, 50, 0.08);
+                  border: 1px solid rgba(240, 80, 50, 0.2);
+                  border-radius: 8px;
+                  padding: 7px 14px;
+                "
+              >
+                <i
+                  class="fa-brands fa-git-alt"
+                  style="color: #f05032; font-size: 0.9rem"
+                ></i>
+                <span
+                  style="
+                    color: #d0d0d0;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    font-family: &quot;Saira&quot;, sans-serif;
+                  "
+                  >Git</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div
+            style="
+              margin: 0 36px;
+              height: 1px;
+              background: linear-gradient(
+                90deg,
+                rgba(0, 210, 255, 0.12),
+                transparent
+              );
+            "
+          ></div>
+
+          <!-- ── Two column: Features + Terminal ── -->
+          <div
+            class="proj-grid"
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 28px;
+              padding: 28px 36px 36px;
+            "
+          >
+            <!-- Key Features 2×2 grid -->
+            <div>
+              <p
+                style="
+                  color: #7a8fa6;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  margin-bottom: 14px;
+                "
+              >
+                <i
+                  class="fa-solid fa-gear"
+                  style="color: #00d2ff; margin-right: 6px"
+                ></i
+                >Key Features
+              </p>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"
+              >
+                <div class="feature-item">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <div class="feature-dot"></div>
+                    <div>
+                      <p
+                        style="
+                          color: #00d2ff;
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          margin-bottom: 4px;
+                        "
+                      >
+                        Core Functionality
+                      </p>
+                      <p
+                        style="
+                          color: #7a8fa6;
+                          font-size: 0.75rem;
+                          line-height: 1.55;
+                        "
+                      >
+                        Full CRUD on databases &amp; tables.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <div class="feature-dot"></div>
+                    <div>
+                      <p
+                        style="
+                          color: #00d2ff;
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          margin-bottom: 4px;
+                        "
+                      >
+                        Data Integrity
+                      </p>
+                      <p
+                        style="
+                          color: #7a8fa6;
+                          font-size: 0.75rem;
+                          line-height: 1.55;
+                        "
+                      >
+                        Strict type validation &amp; Primary Key constraints.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <div class="feature-dot"></div>
+                    <div>
+                      <p
+                        style="
+                          color: #00d2ff;
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          margin-bottom: 4px;
+                        "
+                      >
+                        SQL Simulation
+                      </p>
+                      <p
+                        style="
+                          color: #7a8fa6;
+                          font-size: 0.75rem;
+                          line-height: 1.55;
+                        "
+                      >
+                        Custom parsing engine for SQL-like syntax.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <div style="display: flex; gap: 8px; align-items: flex-start">
+                    <div class="feature-dot"></div>
+                    <div>
+                      <p
+                        style="
+                          color: #00d2ff;
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          margin-bottom: 4px;
+                        "
+                      >
+                        Portable
+                      </p>
+                      <p
+                        style="
+                          color: #7a8fa6;
+                          font-size: 0.75rem;
+                          line-height: 1.55;
+                        "
+                      >
+                        Containerized — instant deploy on any Linux env.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terminal Quick Start -->
+            <div>
+              <p
+                style="
+                  color: #7a8fa6;
+                  font-size: 0.72rem;
+                  font-weight: 700;
+                  letter-spacing: 0.1em;
+                  text-transform: uppercase;
+                  margin-bottom: 14px;
+                "
+              >
+                <i
+                  class="fa-solid fa-bolt"
+                  style="color: #00d2ff; margin-right: 6px"
+                ></i
+                >Quick Start — No Install Required
+              </p>
+              <div class="terminal-window">
+                <div class="terminal-bar">
+                  <div class="terminal-dot" style="background: #ff5f57"></div>
+                  <div class="terminal-dot" style="background: #ffbd2e"></div>
+                  <div class="terminal-dot" style="background: #28c840"></div>
+                  <span
+                    style="
+                      flex: 1;
+                      text-align: center;
+                      color: #4a6070;
+                      font-size: 0.7rem;
+                      font-family: &quot;Saira&quot;, sans-serif;
+                    "
+                    >bash — terminal</span
+                  >
+                  <button class="copy-btn" onclick="copyDockerCmd(this)">
+                    <i class="fa-regular fa-copy" style="margin-right: 4px"></i
+                    >Copy
+                  </button>
+                </div>
+                <div class="terminal-body">
+                  <div style="margin-bottom: 6px">
+                    <span class="terminal-dim"
+                      ># Try instantly on your machine</span
+                    >
+                  </div>
+                  <div style="margin-bottom: 16px">
+                    <span class="terminal-prompt">mazen@devops</span
+                    ><span style="color: #7a8fa6">:</span
+                    ><span style="color: #4a9dff">~</span
+                    ><span style="color: #7a8fa6">$ </span>
+                    <span class="terminal-cmd" id="docker-cmd"
+                      >docker run -it mazennasser/bash-database:v1.1</span
+                    >
+                  </div>
+                  <div style="margin-bottom: 6px">
+                    <span class="terminal-dim"># Or clone the repository</span>
+                  </div>
+                  <div>
+                    <span class="terminal-prompt">mazen@devops</span
+                    ><span style="color: #7a8fa6">:</span
+                    ><span style="color: #4a9dff">~</span
+                    ><span style="color: #7a8fa6">$ </span>
+                    <span style="color: #a8e0b0; font-size: 0.78rem"
+                      >git clone https://github.com/MaZeNNaSSer22/<wbr />Database-Management-System-DBMS-.git</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /proj-grid -->
+        </div>
+        <!-- /featured-project -->
+
+        <div class="text-center mt-10">
+          <a
+            href="https://github.com/MaZeNNaSSer22"
+            target="_blank"
+            class="btn-outline"
+          >
+            <i class="fa-brands fa-github"></i> More Projects on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      @media (max-width: 768px) {
+        .proj-grid {
+          grid-template-columns: 1fr !important;
+        }
+        .featured-project [style*="padding:36px 36px"],
+        .featured-project [style*="padding:24px 36px"],
+        .featured-project [style*="padding:28px 36px"],
+        .featured-project [style*="margin:28px 36px"],
+        .featured-project [style*="margin:0 36px"] {
+          padding-left: 20px !important;
+          padding-right: 20px !important;
+          margin-left: 16px !important;
+          margin-right: 16px !important;
+        }
+      }
+    </style>
+
+    <!-- ───────────── CONTACT ───────────── -->
+    <section
+      id="contact"
+      class="py-24 px-6"
+      style="background: rgba(0, 210, 255, 0.015)"
+    >
+      <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="reveal flex flex-col items-center text-center mb-6">
+          <p
+            class="text-cyan text-sm font-medium tracking-widest uppercase mb-2"
+          >
+            Get In Touch
+          </p>
+          <h2 class="section-title mb-4">Contact <span>Me</span></h2>
+          <div class="section-line mx-auto mb-5"></div>
+          <p
+            style="
+              color: #7a8fa6;
+              font-size: 0.95rem;
+              max-width: 480px;
+              line-height: 1.75;
+              font-style: italic;
+            "
+          >
+            "Have a question or want to work together?<br />Feel free to reach
+            out!"
+          </p>
+        </div>
+
+        <!-- ── Social Hub Icons Row ── -->
+        <div class="reveal" style="margin: 40px 0 48px">
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 20px;
+            "
+          >
+            <!-- LinkedIn -->
+            <a
+              href="https://www.linkedin.com/in/mazennasserahmed"
+              target="_blank"
+              class="contact-hub-btn"
+              style="--hub-color: #0a66c2"
+            >
+              <div
+                class="hub-icon-wrap"
+                style="
+                  background: rgba(10, 102, 194, 0.1);
+                  border-color: rgba(10, 102, 194, 0.3);
+                "
+              >
+                <i
+                  class="fa-brands fa-linkedin-in"
+                  style="color: #0a66c2; font-size: 1.6rem"
+                ></i>
+              </div>
+              <span class="hub-label">LinkedIn</span>
+            </a>
+
+            <!-- Gmail -->
+            <a
+              href="mailto:mazennasser647@gmail.com"
+              class="contact-hub-btn"
+              style="--hub-color: #ea4335"
+            >
+              <div
+                class="hub-icon-wrap"
+                style="
+                  background: rgba(234, 67, 53, 0.1);
+                  border-color: rgba(234, 67, 53, 0.3);
+                "
+              >
+                <i
+                  class="fa-solid fa-envelope"
+                  style="color: #ea4335; font-size: 1.6rem"
+                ></i>
+              </div>
+              <span class="hub-label">Gmail</span>
+            </a>
+
+            <!-- GitHub -->
+            <a
+              href="https://github.com/MaZeNNaSSer22"
+              target="_blank"
+              class="contact-hub-btn"
+              style="--hub-color: #e2e8f0"
+            >
+              <div
+                class="hub-icon-wrap"
+                style="
+                  background: rgba(255, 255, 255, 0.06);
+                  border-color: rgba(255, 255, 255, 0.18);
+                "
+              >
+                <i
+                  class="fa-brands fa-github"
+                  style="color: #e2e8f0; font-size: 1.6rem"
+                ></i>
+              </div>
+              <span class="hub-label">GitHub</span>
+            </a>
+
+            <!-- Location -->
+            <div
+              class="contact-hub-btn"
+              style="--hub-color: #00d2ff; cursor: default"
+            >
+              <div
+                class="hub-icon-wrap"
+                style="
+                  background: rgba(0, 210, 255, 0.08);
+                  border-color: rgba(0, 210, 255, 0.25);
+                "
+              >
+                <i
+                  class="fa-solid fa-location-dot"
+                  style="color: #00d2ff; font-size: 1.6rem"
+                ></i>
+              </div>
+              <span class="hub-label">Cairo, Egypt</span>
+            </div>
+
+            <!-- Phone -->
+            <a
+              href="tel:+201274980969"
+              class="contact-hub-btn"
+              style="--hub-color: #00d2ff"
+            >
+              <div
+                class="hub-icon-wrap"
+                style="
+                  background: rgba(0, 210, 255, 0.08);
+                  border-color: rgba(0, 210, 255, 0.25);
+                "
+              >
+                <i
+                  class="fa-solid fa-phone"
+                  style="color: #00d2ff; font-size: 1.6rem"
+                ></i>
+              </div>
+              <span class="hub-label">Phone</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Divider with label -->
+        <div
+          class="reveal"
+          style="
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+          "
+        >
+          <div
+            style="
+              flex: 1;
+              height: 1px;
+              background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 210, 255, 0.2)
+              );
+            "
+          ></div>
+          <span
+            style="
+              color: #4a6070;
+              font-size: 0.72rem;
+              font-weight: 700;
+              letter-spacing: 0.15em;
+              text-transform: uppercase;
+            "
+          >
+            Or send a message
+          </span>
+          <div
+            style="
+              flex: 1;
+              height: 1px;
+              background: linear-gradient(
+                90deg,
+                rgba(0, 210, 255, 0.2),
+                transparent
+              );
+            "
+          ></div>
+        </div>
+
+        <!-- ── Contact Form ── -->
+        <div class="reveal" style="max-width: 700px; margin: 0 auto">
+          <div
+            style="
+              background: rgba(12, 18, 28, 0.7);
+              border: 1px solid rgba(0, 210, 255, 0.15);
+              border-radius: 20px;
+              padding: 40px;
+              backdrop-filter: blur(12px);
+              box-shadow:
+                0 0 48px rgba(0, 210, 255, 0.05),
+                0 16px 64px rgba(0, 0, 0, 0.5);
+            "
+          >
+            <!-- Top accent -->
+            <div
+              style="
+                height: 2px;
+                background: linear-gradient(
+                  90deg,
+                  #00d2ff,
+                  rgba(0, 210, 255, 0.1)
+                );
+                border-radius: 2px;
+                margin-bottom: 32px;
+              "
+            ></div>
+
+            <form id="contact-form" onsubmit="handleFormSubmit(event)">
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 18px;
+                  margin-bottom: 18px;
+                "
+                class="form-row"
+              >
+                <!-- Name -->
+                <div>
+                  <label
+                    style="
+                      display: block;
+                      color: #4a6878;
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      letter-spacing: 0.1em;
+                      text-transform: uppercase;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-user"
+                      style="
+                        margin-right: 5px;
+                        color: #00d2ff;
+                        font-size: 0.6rem;
+                      "
+                    ></i
+                    >Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    class="form-input"
+                    required
+                  />
+                </div>
+                <!-- Email -->
+                <div>
+                  <label
+                    style="
+                      display: block;
+                      color: #4a6878;
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      letter-spacing: 0.1em;
+                      text-transform: uppercase;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <i
+                      class="fa-solid fa-envelope"
+                      style="
+                        margin-right: 5px;
+                        color: #00d2ff;
+                        font-size: 0.6rem;
+                      "
+                    ></i
+                    >Email
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    class="form-input"
+                    required
+                  />
+                </div>
+              </div>
+              <!-- Message -->
+              <div style="margin-bottom: 24px">
+                <label
+                  style="
+                    display: block;
+                    color: #4a6878;
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <i
+                    class="fa-solid fa-comment-dots"
+                    style="margin-right: 5px; color: #00d2ff; font-size: 0.6rem"
+                  ></i
+                  >Message
+                </label>
+                <textarea
+                  rows="5"
+                  placeholder="Have a question or want to work together? Tell me..."
+                  class="form-input resize-none"
+                ></textarea>
+              </div>
+              <!-- Submit -->
+              <button
+                type="submit"
+                id="contact-send-btn"
+                style="
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 10px;
+                  background: linear-gradient(135deg, #00d2ff, #0099bb);
+                  color: #0a0c10;
+                  font-family: &quot;Saira&quot;, sans-serif;
+                  font-weight: 700;
+                  font-size: 0.95rem;
+                  letter-spacing: 0.04em;
+                  padding: 15px 28px;
+                  border: none;
+                  border-radius: 10px;
+                  box-shadow: 0 0 28px rgba(0, 210, 255, 0.35);
+                  cursor: pointer;
+                  transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+                "
+              >
+                <i class="fa-solid fa-paper-plane"></i>
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────── FOOTER ───────────── -->
+    <footer
+      style="
+        border-top: 1px solid rgba(0, 210, 255, 0.1);
+        background: #060a0e;
+        position: relative;
+        overflow: hidden;
+      "
+    >
+      <!-- Subtle grid overlay -->
+      <div
+        style="
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background-image:
+            linear-gradient(rgba(0, 210, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(
+              90deg,
+              rgba(0, 210, 255, 0.025) 1px,
+              transparent 1px
+            );
+          background-size: 48px 48px;
+        "
+      ></div>
+
+      <div
+        style="
+          position: relative;
+          z-index: 1;
+          max-width: 1152px;
+          margin: 0 auto;
+          padding: 48px 24px 32px;
+        "
+      >
+        <!-- Top row: brand + links + socials -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: start;
+            gap: 32px;
+            margin-bottom: 40px;
+          "
+          class="footer-grid"
+        >
+          <!-- Brand -->
+          <div>
+            <div
+              class="font-heading font-bold text-2xl"
+              style="color: #00d2ff; margin-bottom: 10px"
+            >
+              Mazen Nasser<span style="color: #e2e8f0"></span>
+            </div>
+            <p
+              style="
+                color: ##00d2ff;
+                font-size: 0.82rem;
+                line-height: 1.7;
+                max-width: 220px;
+              "
+            >
+              Cloud &amp; DevOps Engineer — building scalable infrastructure
+              through seamless automation.
+            </p>
+          </div>
+
+          <!-- Nav links (center) -->
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <p
+              style="
+                color: #4a6070;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+              "
+            >
+              Navigation
+            </p>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px 20px;
+              "
+            >
+              <a
+                href="#home"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Home</a
+              >
+              <a
+                href="#about"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >About</a
+              >
+              <a
+                href="#education"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Education</a
+              >
+              <a
+                href="#skills"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Skills</a
+              >
+              <a
+                href="#experience"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Experience</a
+              >
+              <a
+                href="#services"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Services</a
+              >
+
+              <a
+                href="#projects"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Projects</a
+              >
+              <a
+                href="#achievements"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Achievements</a
+              >
+
+              <a
+                href="#contact"
+                style="
+                  color: #6a8090;
+                  font-size: 0.8rem;
+                  text-decoration: none;
+                  transition: color 0.2s;
+                "
+                onmouseover="this.style.color = '#00d2ff'"
+                onmouseout="this.style.color = '#6a8090'"
+                >Contact</a
+              >
+            </div>
+          </div>
+
+          <!-- Socials (right) -->
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 12px;
+            "
+          >
+            <p
+              style="
+                color: #4a6070;
+                font-size: 0.68rem;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+              "
+            >
+              Connect
+            </p>
+            <div style="display: flex; gap: 10px">
+              <a
+                href="https://linkedin.com/in/"
+                target="_blank"
+                class="footer-social"
+                style="--fs-color: rgba(10, 102, 194, 0.5)"
+                title="LinkedIn"
+              >
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+              <a
+                href="https://github.com/MaZeNNaSSer22"
+                target="_blank"
+                class="footer-social"
+                style="--fs-color: rgba(255, 255, 255, 0.3)"
+                title="GitHub"
+              >
+                <i class="fa-brands fa-github"></i>
+              </a>
+              <a
+                href="mailto:your@gmail.com"
+                class="footer-social"
+                style="--fs-color: rgba(234, 67, 53, 0.5)"
+                title="Email"
+              >
+                <i class="fa-solid fa-envelope"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div
+          style="
+            height: 1px;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(0, 210, 255, 0.15),
+              transparent
+            );
+            margin-bottom: 24px;
+          "
+        ></div>
+
+        <!-- Copyright bar -->
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+          "
+        >
+          <p style="color: #374858; font-size: 0.78rem">
+            © 2026 <span style="color: #5a7888">Mazen Nasser</span>. All rights
+            Reserved.
+          </p>
+          <p
+            style="
+              color: #374858;
+              font-size: 0.78rem;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+            "
+          >
+            Built with <span style="color: #00d2ff">♥</span> using HTML ·
+            Tailwind CSS · FontAwesome
+          </p>
+          <a
+            href="#home"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              color: #4a6878;
+              font-size: 0.75rem;
+              text-decoration: none;
+              background: rgba(0, 210, 255, 0.05);
+              border: 1px solid rgba(0, 210, 255, 0.12);
+              border-radius: 6px;
+              padding: 5px 12px;
+              transition:
+                color 0.2s,
+                border-color 0.2s;
+            "
+            onmouseover="
+              this.style.color = '#00d2ff';
+              this.style.borderColor = 'rgba(0,210,255,0.35)';
+            "
+            onmouseout="
+              this.style.color = '#4a6878';
+              this.style.borderColor = 'rgba(0,210,255,0.12)';
+            "
+          >
+            <i class="fa-solid fa-arrow-up" style="font-size: 0.65rem"></i> Back
+            to Top
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      /* ── Contact Hub buttons ── */
+      .contact-hub-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        transition: transform 0.25s;
+      }
+      .contact-hub-btn:hover {
+        transform: translateY(-6px);
+      }
+      .hub-icon-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          box-shadow 0.3s,
+          border-color 0.3s,
+          background 0.3s;
+      }
+      .contact-hub-btn:hover .hub-icon-wrap {
+        box-shadow:
+          0 0 28px color-mix(in srgb, var(--hub-color) 40%, transparent),
+          0 0 8px color-mix(in srgb, var(--hub-color) 20%, transparent);
+        border-color: var(--hub-color) !important;
+        background: color-mix(
+          in srgb,
+          var(--hub-color) 15%,
+          transparent
+        ) !important;
+      }
+      .hub-label {
+        color: #6a8090;
+        font-size: 0.78rem;
+        font-weight: 600;
+        font-family: "Saira", sans-serif;
+        letter-spacing: 0.04em;
+        transition: color 0.2s;
+      }
+      .contact-hub-btn:hover .hub-label {
+        color: #e2e8f0;
+      }
+
+      /* Send button hover */
+      #contact-send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(0, 210, 255, 0.55) !important;
+      }
+
+      /* Footer social icons */
+      .footer-social {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5a7888;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition:
+          color 0.2s,
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
+      }
+      .footer-social:hover {
+        color: #e2e8f0;
+        border-color: var(--fs-color);
+        box-shadow: 0 0 14px var(--fs-color);
+        background: color-mix(in srgb, var(--fs-color) 15%, transparent);
+      }
+
+      /* Form responsive */
+      @media (max-width: 560px) {
+        .form-row {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      /* Footer responsive */
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr !important;
+          text-align: center;
+        }
+        .footer-grid > div:last-child {
+          align-items: center !important;
+        }
+      }
+    </style>
+
+    <!-- Back to top -->
+    <button
+      id="back-to-top"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      class="fixed bottom-8 right-8 w-10 h-10 rounded-full flex items-center justify-center opacity-0 pointer-events-none transition-opacity z-50"
+      style="
+        background: rgba(0, 210, 255, 0.15);
+        border: 1px solid rgba(0, 210, 255, 0.3);
+        color: #00d2ff;
+      "
+    >
+      <i class="fa-solid fa-arrow-up text-sm"></i>
+    </button>
+
+    <!-- ───────────── SCRIPTS ───────────── -->
+    <script>
+      // ── Navbar scroll effect ──
+      const navbar = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        navbar.classList.toggle("scrolled", window.scrollY > 40);
+        // Back to top
+        const btn = document.getElementById("back-to-top");
+        if (window.scrollY > 400) {
+          btn.style.opacity = "1";
+          btn.style.pointerEvents = "auto";
+        } else {
+          btn.style.opacity = "0";
+          btn.style.pointerEvents = "none";
+        }
+      });
+
+      // ── Hamburger ──
+      const hamburgerBtn = document.getElementById("hamburger-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      hamburgerBtn.addEventListener("click", () => {
+        hamburgerBtn.classList.toggle("open");
+        mobileMenu.classList.toggle("open");
+      });
+      document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+        link.addEventListener("click", () => {
+          hamburgerBtn.classList.remove("open");
+          mobileMenu.classList.remove("open");
+        });
+      });
+
+      // ── Active nav link on scroll ──
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-link");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              navLinks.forEach((l) => l.classList.remove("active"));
+              const active = document.querySelector(
+                `.nav-link[href="#${entry.target.id}"]`,
+              );
+              if (active) active.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "-40% 0px -55% 0px" },
+      );
+      sections.forEach((s) => observer.observe(s));
+
+      // ── Reveal on scroll ──
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+              setTimeout(() => entry.target.classList.add("visible"), i * 80);
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => revealObserver.observe(el));
+
+      // ── Copy Docker command ──
+      function copyDockerCmd(btn) {
+        const cmd = document.getElementById("docker-cmd").textContent;
+        navigator.clipboard.writeText(cmd).then(() => {
+          btn.innerHTML =
+            '<i class="fa-solid fa-check" style="margin-right:4px;"></i>Copied!';
+          btn.style.background = "rgba(0,210,255,0.2)";
+          btn.style.borderColor = "rgba(0,210,255,0.5)";
+          setTimeout(() => {
+            btn.innerHTML =
+              '<i class="fa-regular fa-copy" style="margin-right:4px;"></i>Copy';
+            btn.style.background = "";
+            btn.style.borderColor = "";
+          }, 2000);
+        });
+      }
+
+      // ── Experience card hover effects ──
+      document.querySelectorAll(".exp-card").forEach((card) => {
+        const isNTI = card.querySelector('[style*="#00c8aa"]') !== null;
+        const glowColor = isNTI
+          ? "rgba(0,200,170,0.14)"
+          : "rgba(0,210,255,0.14)";
+        const borderColor = isNTI
+          ? "rgba(0,200,170,0.45)"
+          : "rgba(0,210,255,0.45)";
+        card.addEventListener("mouseenter", () => {
+          card.style.borderColor = borderColor;
+          card.style.boxShadow = `0 0 40px ${glowColor}, 0 12px 48px rgba(0,0,0,0.5)`;
+          card.style.transform = "translateY(-6px)";
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.borderColor = "#1e2a38";
+          card.style.boxShadow = "";
+          card.style.transform = "";
+        });
+      });
+
+      // ── Skill card hover effects ──
+      document.querySelectorAll(".skill-card").forEach((card) => {
+        const iconWrap = card.querySelector(".skill-icon-wrap");
+        const line = card.querySelector(".skill-card-line");
+        card.addEventListener("mouseenter", () => {
+          card.style.borderColor = "rgba(0,210,255,0.45)";
+          card.style.boxShadow =
+            "0 0 32px rgba(0,210,255,0.12), 0 8px 40px rgba(0,0,0,0.5)";
+          card.style.transform = "translateY(-6px) scale(1.01)";
+          if (line) line.style.opacity = "1";
+          if (iconWrap) {
+            iconWrap.style.boxShadow = "0 0 20px rgba(0,210,255,0.25)";
+            iconWrap.style.borderColor = "rgba(0,210,255,0.45)";
+          }
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.borderColor = "#1e2a38";
+          card.style.boxShadow = "";
+          card.style.transform = "";
+          if (line) line.style.opacity = "0";
+          if (iconWrap) {
+            iconWrap.style.boxShadow = "";
+            iconWrap.style.borderColor = "";
+          }
+        });
+      });
+
+      // ── Skill bar animation ──
+      const skillObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const level = entry.target.dataset.level;
+              const fill = entry.target.querySelector(".skill-bar-fill");
+              if (fill) fill.style.width = level + "%";
+              skillObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.3 },
+      );
+      document
+        .querySelectorAll(".skill-item")
+        .forEach((el) => skillObserver.observe(el));
+
+      // ── Form submit ──
+      function handleFormSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById("contact-send-btn");
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Message Sent!';
+        btn.style.background = "linear-gradient(135deg,#00cc88,#007755)";
+        btn.style.boxShadow = "0 0 32px rgba(0,200,136,0.5)";
+        setTimeout(() => {
+          btn.innerHTML =
+            '<i class="fa-solid fa-paper-plane"></i> Send Message';
+          btn.style.background = "";
+          btn.style.boxShadow = "";
+          e.target.reset();
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
